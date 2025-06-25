@@ -123,9 +123,9 @@ const ClientMarket = () => {
 
   const marketStatus = 'open'; // Simulé
   const marketStats = {
-    gainers: assets.filter(a => a.changePercent > 0).length,
-    losers: assets.filter(a => a.changePercent < 0).length,
-    unchanged: assets.filter(a => a.changePercent === 0).length
+    gainers: filteredAssets.filter(a => a.changePercent > 0).length,
+    losers: filteredAssets.filter(a => a.changePercent < 0).length,
+    unchanged: filteredAssets.filter(a => a.changePercent === 0).length
   };
 
   return (
