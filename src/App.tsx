@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 // Layouts
@@ -23,7 +23,7 @@ import AdminAlerts from "@/pages/admin/AdminAlerts";
 import AdminAIContent from "@/pages/admin/AdminAIContent";
 import AdminSettings from "@/pages/admin/AdminSettings";
 
-// Client Pages (à créer)
+// Client Pages
 import ClientDashboard from "@/pages/client/ClientDashboard";
 import ClientPortfolio from "@/pages/client/ClientPortfolio";
 import ClientAlerts from "@/pages/client/ClientAlerts";
@@ -35,6 +35,32 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Composant pour gérer la redirection de la route racine
+const RootRedirect = () => {
+  const { user, isLoading } = useAuth();
+  
+  console.log('RootRedirect - user:', user);
+  console.log('RootRedirect - isLoading:', isLoading);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    console.log('RootRedirect - No user, redirecting to login');
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  // Rediriger selon le rôle
+  const redirectPath = user.role === 'admin' ? '/admin' : '/client';
+  console.log(`RootRedirect - Redirecting to: ${redirectPath}`);
+  return <Navigate to={redirectPath} replace />;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -44,7 +70,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             {/* Redirect root to appropriate dashboard */}
-            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/" element={<RootRedirect />} />
             
             {/* Auth Routes */}
             <Route path="/auth" element={<AuthLayout />}>

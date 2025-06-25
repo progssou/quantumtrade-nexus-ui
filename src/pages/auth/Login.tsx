@@ -17,20 +17,23 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/';
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
+      const user = await login(email, password);
+      if (user) {
+        console.log('Login successful, user:', user);
         toast({
           title: "Connexion réussie",
           description: "Bienvenue sur QuantumTrade !",
         });
-        navigate(from, { replace: true });
+        
+        // Rediriger selon le rôle de l'utilisateur
+        const redirectPath = user.role === 'admin' ? '/admin' : '/client';
+        console.log(`Redirecting to: ${redirectPath}`);
+        navigate(redirectPath, { replace: true });
       } else {
         toast({
           title: "Erreur de connexion",
@@ -39,6 +42,7 @@ const Login = () => {
         });
       }
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de la connexion",

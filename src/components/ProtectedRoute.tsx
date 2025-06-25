@@ -12,6 +12,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
   const { user, isLoading } = useAuth();
   const location = useLocation();
 
+  console.log('ProtectedRoute - user:', user);
+  console.log('ProtectedRoute - requiredRole:', requiredRole);
+  console.log('ProtectedRoute - isLoading:', isLoading);
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -21,15 +25,19 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
   }
 
   if (!user) {
+    console.log('ProtectedRoute - No user, redirecting to login');
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
   if (requiredRole && user.role !== requiredRole) {
-    // Rediriger vers le dashboard approprié selon le rôle
+    console.log(`ProtectedRoute - Role mismatch. User role: ${user.role}, Required: ${requiredRole}`);
+    // Rediriger vers le dashboard approprié selon le rôle de l'utilisateur
     const redirectPath = user.role === 'admin' ? '/admin' : '/client';
+    console.log(`ProtectedRoute - Redirecting to: ${redirectPath}`);
     return <Navigate to={redirectPath} replace />;
   }
 
+  console.log('ProtectedRoute - Access granted');
   return <>{children}</>;
 };
 
