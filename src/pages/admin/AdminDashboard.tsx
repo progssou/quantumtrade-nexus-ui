@@ -100,7 +100,7 @@ const AdminDashboard = () => {
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">Alerte déclenchée</p>
-                  <p className="text-xs text-gray-500">AAPL > $200 - Il y a 3h</p>
+                  <p className="text-xs text-gray-500">AAPL {'>'} $200 - Il y a 3h</p>
                 </div>
               </div>
               <div className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">

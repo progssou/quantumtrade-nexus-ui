@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -163,10 +162,10 @@ const ClientAlerts = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value=">">></SelectItem>
-                      <SelectItem value="<"><</SelectItem>
-                      <SelectItem value=">=">=</SelectItem>
-                      <SelectItem value="<="><=</SelectItem>
+                      <SelectItem value=">">{'>'}</SelectItem>
+                      <SelectItem value="<">{'<'}</SelectItem>
+                      <SelectItem value=">=">{'>='}</SelectItem>
+                      <SelectItem value="<=">{'<='}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
