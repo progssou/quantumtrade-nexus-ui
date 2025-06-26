@@ -1,10 +1,13 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, DollarSign, Activity, Target, Clock } from 'lucide-react';
-import { mockPortfolio, mockRecommendations } from '@/services/mockData';
+import { mockPortfolio, mockRecommendations, mockTrades } from '@/services/mockData';
 import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { TradingBotWidget } from '../../components/TradingBotWidget';
+import { TradesList } from '../../components/TradesList';
+import { Trade } from '../../services/trading/types';
+import { useTradingBot } from '../../hooks/useTradingBot';
 
 const ClientDashboard = () => {
   // Calculs du portefeuille
@@ -31,6 +34,25 @@ const ClientDashboard = () => {
   // Recommandations personnalisées
   const personalRecommendations = mockRecommendations.filter(rec => rec.userId);
 
+  // Hook pour récupérer le signal actuel du bot (exemple avec des prix mock)
+  const prices = [100, 102, 101, 105, 110, 108, 112, 115, 117, 120, 119, 121, 123, 125, 127, 130, 128, 129, 131, 133];
+  const { signal } = useTradingBot(prices);
+
+  // State dynamique pour l'historique des trades
+  const [trades, setTrades] = useState<Trade[]>(mockTrades);
+
+  // Handler pour simuler un trade
+  function handleSimulateTrade() {
+    const newTrade: Trade = {
+      id: Date.now().toString(),
+      date: new Date().toLocaleString(),
+      signal,
+      price: prices[prices.length - 1],
+      asset: 'BTC', // ou autre actif selon ton contexte
+    };
+    setTrades([...trades, newTrade]);
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -41,6 +63,9 @@ const ClientDashboard = () => {
         </div>
         <Badge variant="default">Marché Ouvert</Badge>
       </div>
+
+      {/* Trading Bot Widget */}
+      <TradingBotWidget />
 
       {/* Portfolio Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -222,6 +247,17 @@ const ClientDashboard = () => {
           </CardContent>
         </Card>
       </div>
+      {/* Section Trades */}
+      <div className="flex items-center justify-between mt-8 mb-2">
+        <h2 className="text-xl font-bold">Actions de Trading</h2>
+        <button
+          onClick={handleSimulateTrade}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          Simuler un trade
+        </button>
+      </div>
+      <TradesList trades={trades} />
     </div>
   );
 };

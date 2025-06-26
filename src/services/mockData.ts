@@ -1,5 +1,5 @@
-
 import { User, Asset, PortfolioItem, Alert, AIRecommendation, DashboardStats } from '@/types';
+import { TradeSignal } from './trading/types';
 
 // Mock Users
 export const mockUsers: User[] = [
@@ -180,3 +180,9 @@ export const mockDashboardStats: DashboardStats = {
   aiRecommendations: 34,
   marketStatus: 'open'
 };
+
+export const mockTrades = [
+  { id: '1', date: '2024-06-01 10:00', signal: 'BUY' as TradeSignal, price: 120, asset: 'BTC' },
+  { id: '2', date: '2024-06-02 14:30', signal: 'SELL' as TradeSignal, price: 125, asset: 'ETH' },
+  { id: '3', date: '2024-06-03 09:15', signal: 'HOLD' as TradeSignal, price: 130, asset: 'BTC' },
+];
